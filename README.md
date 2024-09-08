@@ -6,12 +6,16 @@ This project was created for the Singapore Land Authority-Amazon Web Services Ge
 ## Demo video
 TBC
 
-
-# Installation
+# Installation/Running the localhost
 
 If you would like to locally download the repo, we recommend setting up a [virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/).
 Install the necessary dependencies with:
 ```pip install -r requirements. txt```
+
+To run on localhost, navigate into the **app** folder and use this command in the terminal:
+```streamlit run app.py```
+This will open up a new tab in your browser. To close the session, use <kbd>Ctrl</kbd> + <kbd>C</kbd> in the same terminal. 
+<i> *You may need to do this twice to ensure the session has closed.</i>
 
 ## About the project
 
