@@ -10,11 +10,15 @@ TBC
 
 If you would like to locally download the repo, we recommend setting up a [virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/).
 Install the necessary dependencies with:
+<br>
 ```pip install -r requirements. txt```
 
 To run on localhost, navigate into the **app** folder and use this command in the terminal:
+<br>
 ```streamlit run app.py```
+<br>
 This will open up a new tab in your browser. To close the session, use <kbd>Ctrl</kbd> + <kbd>C</kbd> in the same terminal. 
+<br>
 <i> *You may need to do this twice to ensure the session has closed.</i>
 
 ## About the project
