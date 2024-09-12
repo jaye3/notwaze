@@ -38,7 +38,7 @@ with st.container():
     start, end = userDetails["BUILDINGNAME"], ""
 
     startInput = st_keyup("Search for start point:", value=start, debounce=500, key="init")
-    if startInput != userDetails["BUILDINGNAME"]:
+    if startInput != userDetails["BUILDINGNAME"] and startInput:
         startPoint = st.selectbox(
             label="Start from:", 
             options=setSearchOptions(startInput),
