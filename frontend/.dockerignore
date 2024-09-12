@@ -1,0 +1,13 @@
+# Ignore all environment files
+.env
+.venv
+
+# Ignore all .DS_Store files (Mac-specific)
+.DS_Store
+
+# Ignore pychache files and folders
+__pycache__
+*.pyc
+
+# Ignore static files
+*.svg
