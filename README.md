@@ -48,3 +48,4 @@ Sending appreciation to these fellas for the help and inspiration:
 - [Streamlit JS Eval for geolocation](https://github.com/aghasemi/streamlit_js_eval)
 - [Keyup for live searchbar](https://github.com/blackary/streamlit-keyup)
 - [ST Folium for integrating the map render](https://github.com/randyzwitch/streamlit-folium/tree/master)
+- [Repo for creating Docker Image with Streamlit](https://github.com/entbappy/Streamlit-app-Docker-Image)
