@@ -26,7 +26,7 @@ def setOptions(type, options):
 # Main body
 initSession()
 
-st.image("logo.svg", width=200)
+st.image("logo.svg", width=150)
 st.title("Welcome to NotWaze - your urban walking guide on-the-go")
 
 # Rendering in current location
