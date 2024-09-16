@@ -64,10 +64,12 @@ with st.container():
             )
         if endPoint:
             end = endPoint[0]
+    
+    st.write(startPoint, endPoint)
 
     dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
 
-    st.button(label="Let's Go!", on_click=lambda: agentInit(startPoint[1], endPoint[1], dist), key="activate")
+    st.button(label="Let's Go!", on_click=lambda: agentInit(startPoint, endPoint, dist), key="activate")
 
 
 
