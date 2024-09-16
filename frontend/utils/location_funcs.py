@@ -8,7 +8,7 @@ def getCurrentLoc():
     while currentLoc is None:
         time.sleep(0.5)
     details = currentLoc["coords"] 
-    coords = (details["latitude"], details["longitude"])
+    coords = [details["latitude"], details["longitude"]]
         
     return coords
 

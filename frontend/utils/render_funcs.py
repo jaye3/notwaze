@@ -13,6 +13,6 @@ def initSession():
 def setSearchOptions(loc):
     res = searchAddress(loc)
     labels = [x["ADDRESS"] for x in res]
-    coords = [(float(y["LATITUDE"]), float(y["LONGITUDE"])) for y in res]
+    coords = [[float(y["LATITUDE"]), float(y["LONGITUDE"])] for y in res]
     options = list(zip(labels, coords))
     return options
