@@ -36,7 +36,7 @@ userLoc = getCurrentLoc()
 userDetails = getLocDetails(userLoc)
 
 with st.container():
-    startPoint, endPoint = None, None
+    startPoint, endPoint = userLoc, None
     start, end = userDetails["BUILDINGNAME"], ""
 
     startInput = st_keyup("Search for start point:", value=start, debounce=500, key="init")
@@ -69,7 +69,7 @@ with st.container():
 
     dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
 
-    st.button(label="Let's Go!", on_click=lambda: agentInit(startPoint, endPoint, dist), key="activate")
+    st.button(label="Let's Go!", on_click=lambda: agentInit(startPoint[1], endPoint[1], dist), key="activate")
 
 
 
