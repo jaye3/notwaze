@@ -9,11 +9,11 @@ from st_keyup import st_keyup
 # import hydralit_components as hc
 
 # Helper functions (local imports)
-from utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
-from utils.agent_funcs import activateAgent
-from utils.render_funcs import setSearchOptions, initSession
-from services.onemap_auth import initToken
-from services.agent import agentInit
+from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
+from frontend.utils.agent_funcs import activateAgent
+from frontend.utils.render_funcs import setSearchOptions, initSession
+from frontend.services.onemap_auth import initToken
+from frontend.services.agent import agentInit
 
 def setOptions(type, options):
     if type == "start":
