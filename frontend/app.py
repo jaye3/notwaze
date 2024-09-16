@@ -6,6 +6,7 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from st_keyup import st_keyup
+import hydralit_components as hc
 
 # Helper functions (local imports)
 from utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
@@ -25,6 +26,8 @@ def setOptions(type, options):
 
 # Main body
 initSession()
+# with hc.HyLoader('Now Loading', hc.Loaders.standard_loaders,index=1):
+#     time.sleep(3)
 
 st.image("logo.svg", width=150)
 st.title("Welcome to NotWaze - your urban walking guide on-the-go")

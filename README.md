@@ -1,5 +1,5 @@
-# Not-Waze
-Using Singapore's proprietary mapping service, Not-Waze aims to empower the public to personalise their health goals in even the smallest of actions through their walking routes.
+# WalkEase
+Using Singapore's proprietary mapping service, WalkEase aims to empower the public to personalise their health goals in even the smallest of actions through their walking routes.
 
 This project was created for the Singapore Land Authority-Amazon Web Services Geospatial Innovation Challenge. Our team tackled the challenge statement, "Using OneMap to suggest a walking trail based on one’s health goals". 
 
