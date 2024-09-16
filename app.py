@@ -23,8 +23,12 @@ def setOptions(type, options):
 
 ##################################
 
-# Main body
+# Setup Page and Session
 initSession()
+st.set_page_config(
+    page_title="WalkEase",
+    layout="wide"
+)
 # with hc.HyLoader('Now Loading', hc.Loaders.standard_loaders,index=1):
 #     time.sleep(3)
 
