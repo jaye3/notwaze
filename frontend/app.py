@@ -6,7 +6,7 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from st_keyup import st_keyup
-import hydralit_components as hc
+# import hydralit_components as hc
 
 # Helper functions (local imports)
 from utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
