@@ -1,7 +1,7 @@
 import streamlit as st
 import boto3
 
-def agentInit():
+def activateAgent():
     region = "us-east-1"
     session = boto3.Session(region_name=region)
     lambda_client = session.client('lambda')

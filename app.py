@@ -10,10 +10,10 @@ from st_keyup import st_keyup
 
 # Helper functions (local imports)
 from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
-from frontend.utils.agent_funcs import activateAgent
+from frontend.utils.agent_funcs import agentInit
 from frontend.utils.render_funcs import setSearchOptions, initSession
 from frontend.services.onemap_auth import initToken
-from frontend.services.agent import agentInit
+from frontend.services.agent import activateAgent
 
 def setOptions(type, options):
     if type == "start":
@@ -51,8 +51,6 @@ with st.container():
             )
         if startPoint:
             start = startPoint[0]
-    if startPoint:
-        st.write(startPoint)
 
     endInput = st_keyup("Search for end point:", value=end, debounce=500)
     if endInput:
@@ -69,7 +67,8 @@ with st.container():
 
     dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
 
-    st.button(label="Let's Go!", on_click=lambda: activateAgent(startPoint, endPoint, dist), key="activate")
+    st.button(label="Let's Go!", on_click=lambda: agentInit(startPoint[1], endPoint[1], dist), key="activate")
+
 
 
 
@@ -78,7 +77,7 @@ with st.container():
 with st.container():
     if st.session_state.agent_active:
         st.header("Personalise your route with Waz, our chatbot!")
-        agentInit()
+        activateAgent()
         
 
 # Rendering map
