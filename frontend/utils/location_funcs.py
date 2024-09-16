@@ -1,7 +1,7 @@
 import requests, os, time, streamlit
 from dotenv import load_dotenv
 from streamlit_js_eval import get_geolocation
-from services.onemap_auth import getResponse
+from frontend.services.onemap_auth import getResponse
 
 def getCurrentLoc():
     currentLoc = get_geolocation()

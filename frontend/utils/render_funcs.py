@@ -1,5 +1,5 @@
-from services.onemap_auth import initToken
-from utils.location_funcs import searchAddress
+from frontend.services.onemap_auth import initToken
+from frontend.utils.location_funcs import searchAddress
 import streamlit as st
 import os
 
