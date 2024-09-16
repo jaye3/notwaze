@@ -29,7 +29,7 @@ initSession()
 # with hc.HyLoader('Now Loading', hc.Loaders.standard_loaders,index=1):
 #     time.sleep(3)
 
-st.image("logo.svg", width=150)
+st.image("./frontend/logo.svg", width=150)
 st.title("Welcome to NotWaze - your urban walking guide on-the-go")
 
 # Rendering in current location
