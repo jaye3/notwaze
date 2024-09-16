@@ -7,12 +7,13 @@ def getCurrentLoc():
     currentLoc = get_geolocation()
     while currentLoc is None:
         time.sleep(0.5)
-    currentLoc = currentLoc["coords"] 
+    details = currentLoc["coords"] 
+    coords = (details["latitude"], details["longitude"])
         
-    return currentLoc
+    return coords
 
-def getLocDetails(loc): # takes in a lat-long dict key-value pair
-    lat, long = loc["latitude"], loc["longitude"]
+def getLocDetails(loc): # takes in a lat-long pair
+    lat, long = loc[0], loc[1]
 
     url = f"https://www.onemap.gov.sg/api/public/revgeocode?location={lat},{long}&buffer=40&addressType=All&otherFeatures=N"
     res = getResponse(url)
