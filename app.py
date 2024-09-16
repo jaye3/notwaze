@@ -30,7 +30,7 @@ initSession()
 #     time.sleep(3)
 
 st.image("./frontend/logo.svg", width=150)
-st.title("Welcome to NotWaze - your urban walking guide on-the-go")
+st.title("Welcome to WalkEase - your urban walking guide on-the-go")
 
 # Rendering in current location
 userLoc = getCurrentLoc() 
