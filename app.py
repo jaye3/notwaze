@@ -21,7 +21,6 @@ def setOptions(type, options):
     if type == "end":
         st.session_state.endOptions = options
 
-
 ##################################
 
 # Main body
@@ -52,6 +51,8 @@ with st.container():
             )
         if startPoint:
             start = startPoint[0]
+    if startPoint:
+        st.write(startPoint)
 
     endInput = st_keyup("Search for end point:", value=end, debounce=500)
     if endInput:
@@ -69,6 +70,8 @@ with st.container():
     dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
 
     st.button(label="Let's Go!", on_click=lambda: activateAgent(startPoint, endPoint, dist), key="activate")
+
+
 
 ################################
 
