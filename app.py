@@ -29,23 +29,21 @@ st.set_page_config(
     page_title="WalkEaze",
     layout="wide"
 )
-# with hc.HyLoader('Now Loading', hc.Loaders.standard_loaders,index=1):
-#     time.sleep(3)
+
+if st.session_state.start == None:
+    # Rendering in current location
+    userLoc = getCurrentLoc() 
+    userDetails = getLocDetails(userLoc)
+
+    st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
+    st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
 st.image("./frontend/logo.svg", width=150)
 st.title("Welcome to WalkEaze - your urban walking guide on-the-go")
 
-
-# Rendering in current location
-userLoc = getCurrentLoc() 
-userDetails = getLocDetails(userLoc)
-
 with st.container():
-    startLoc, endLoc = userLoc, userLoc
-    start, end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
-
-    startInput = st_keyup("Search for start point:", value=start, debounce=500, key="init")
-    if startInput != userDetails["BUILDINGNAME"] and startInput:
+    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="init")
+    if startInput != st.session_state.start and startInput:
         startPoint = st.selectbox(
             label="Start from:", 
             options=setSearchOptions(startInput),
@@ -55,11 +53,11 @@ with st.container():
             placeholder="Select address"
             )
         if startPoint:
-            start = startPoint[0]
-            startLoc = startPoint[1]
+            st.session_state.start = startPoint[0]
+            st.session_state.startLoc = startPoint[1]
 
-    endInput = st_keyup("Search for end point:", value=end, debounce=500)
-    if endInput != userDetails["BUILDINGNAME"] and endInput:
+    endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=500)
+    if endInput != st.session_state.end and endInput:
         endPoint = st.selectbox(
             label="End at:", 
             options=setSearchOptions(endInput),
@@ -69,12 +67,40 @@ with st.container():
             placeholder="Select address"
             )
         if endPoint:
-            end = endPoint[0]
-            endLoc = endPoint[1]
+            st.session_state.end = endPoint[0]
+            st.session_state.endLoc = endPoint[1]
     
     dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
 
-    st.button(label="Let's Go!", on_click=lambda: agentInit(startLoc, endLoc, dist), key="activate")
+    poi_types = st.multiselect(
+        label="What would you like to see? (choose one or more options)",
+        options=[
+                ['Monuments', 'monument'], 
+                ['Historic Sites', 'historicSite'], 
+                ['Parks', 'park'], 
+                ['Museums', 'museum']
+            ],
+        format_func=lambda x:x[0],
+    )
+    poi_types = [x[1] for x in poi_types]
+
+    includeAmenity = st.checkbox(
+        label="Include amenities (i.e. toilets) in the route",
+    )
+    isBarrierFree = st.checkbox(
+        label="Prefer to avoid barriers (e.g. stairs) along the route"
+    )
+
+    userData = {
+        "user_location": st.session_state.startLoc,
+        "end_location": st.session_state.endLoc,
+        "max_route_length": dist, 
+        "poi_types": poi_types,
+        "amenity_types": includeAmenity,
+        "barrier_free": isBarrierFree
+    }
+
+    st.button(label="Let's Go!", on_click=lambda: agentInit(userData), key="activate")
 
 
 
@@ -87,26 +113,65 @@ with st.container():
         activateAgent()
         
 
-# Rendering map
-# if st.session_state.start != userLocName:
+# # Rendering map
+# if st.session_state.activateMap:
+#     # The line below is to import the CSS from font-awesome -- to use their icons (refer to icon_dict in function add_poi_markers)
+#     html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">'
 
-# # placeholder for testing
+#     # Define a map boundary so user cannot drag map out too far (Hard-coded)
+#     min_lon, max_lon = 102.6920, 105.0920
+#     min_lat, max_lat = 1.0305, 1.5505
 
-# # Create a folium map centered around the user's location
-# m = folium.Map(
-#     location=[user_location.y, user_location.x],
-#     zoom_start=100,
-#     control_scale=True
-#     )
+#     # Create a folium map centered around the user's location
+#     m = folium.Map(
+#         location=(user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x),
+#         zoom_start=15,
+#         control_scale=True,
+#         tiles='Cartodb Positron',
+#         max_bounds=True,
+#         min_lat=min_lat,
+#         max_lat=max_lat,
+#         min_lon=min_lon,
+#         max_lon=max_lon,
+#         )
 
-# # Add user location to the map
-# folium.Marker([user_location.y, user_location.x], popup='User Location', icon=folium.Icon(color='red')).add_to(m)
+#     # Add buffer to the map
+#     folium.GeoJson(search_buffer_gdf.geometry,
+#                 style_function=lambda x: {
+#                     'fillOpacity': 0.1       # Set fill opacity to 10%
+#                     }
+#                     ).add_to(m)
 
-# last_point = user_location
-# # # Add POIs to the map
-# for idx, row in intersecting_pois.iterrows():
-#     folium.Marker([row.geometry.y, row.geometry.x], popup=row['NAME']).add_to(m)
-#     folium.PolyLine([[last_point.y, last_point.x], [row.geometry.y, row.geometry.x]]).add_to(m)
+#     # Add locactions of stairs in red
+#     folium.GeoJson(
+#         avoidance_buffer_gdf.geometry,
+#         style_function=lambda x: {'color': 'magenta'},
+#         tooltip='Stairs'
+#         ).add_to(m)
 
-# # Add buffer to the map
-# folium.GeoJson(user_buffer.to_crs(epsg=4326).geometry).add_to(m)
+
+#     # Add user location to the map
+#     folium.Marker(
+#         [user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x],
+#         popup='User Location',
+#         icon=folium.Icon(color='red')
+#     ).add_to(m)
+
+#     # Add end location to the map
+#     folium.Marker(
+#         [end_gdf.iloc[0].geometry.y, end_gdf.iloc[0].geometry.x],
+#         popup='End Location',
+#         icon=folium.Icon(color='red')
+#     ).add_to(m)
+
+#     # Add POIs to the map
+#     add_markers(final_route_points_gdf)
+
+#     # Add routes to the map
+#     add_route_lines(final_route)
+
+#     # Display the map
+#     m
+
+#     print("Total Distance (metres):", final_distance)
+#     print("Total Time (minutes):", round(final_time/60, 2))

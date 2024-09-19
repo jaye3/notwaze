@@ -8,6 +8,14 @@ def initSession():
         st.session_state.agent_active = False
     if "ONEMAP_API_KEY" not in os.environ:
         initToken()
+    if "start" not in st.session_state:
+        st.session_state.start = None
+    if "end" not in st.session_state:
+        st.session_state.end = None   
+    if "startLoc" not in st.session_state:
+        st.session_state.startLoc = None  
+    if "endLoc" not in st.session_state:
+        st.session_state.endLoc = None  
 
 
 def setSearchOptions(loc):

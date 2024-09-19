@@ -1,22 +1,19 @@
 import streamlit as st
 import requests
 
-def agentInit(startDetails, endDetails, distance):
+def agentInit(userData):
     #start and end details are a tuple of (layman address, (lat, long))
     st.session_state.agent_active = True
     url = "http://ec2-100-26-41-70.compute-1.amazonaws.com:80/collect-user-data" 
 
-    radius = distance // 2
-    data = {
-            "user_location": startDetails,
-            "end_location": endDetails,
-            "search_radius": radius,
-            "num_POIs": 5,
-            "max_route_length": distance
-        }
+    radius = userData["max_route_length"] // 2
+    userData["search_radius"] = radius
+    userData["num_POIs"] = 5
+    st.write(userData)
+    
     try:
         # Send user details to backend API to store info
-        res = requests.post(url, json=data)
+        res = requests.post(url, json=userData)
 
         if res.status_code == 200:
             st.success(f"Response from backend: {res.json()['message']}")
@@ -26,3 +23,8 @@ def agentInit(startDetails, endDetails, distance):
         st.error(f"Request failed: {e}")
     
     return
+
+def agentRouting():
+    url = "http://ec2-100-26-41-70.compute-1.amazonaws.com:80/generate-route" 
+
+    

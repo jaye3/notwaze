@@ -1,4 +1,4 @@
-from streamlit_folium import st_folium
+from streamlit_folium import st_folium as folium
 from folium.plugins import PolyLineTextPath
 
 def add_markers(gdf):
@@ -68,68 +68,6 @@ def add_route_lines(route_geometries):
       )
       m.add_child(arrows)
 
-"""### Mapping using Folium"""
 
 
 
-
-# The line below is to import the CSS from font-awesome -- to use their icons (refer to icon_dict in function add_poi_markers)
-html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">'
-
-# Define a map boundary so user cannot drag map out too far (Hard-coded)
-min_lon, max_lon = 102.6920, 105.0920
-min_lat, max_lat = 1.0305, 1.5505
-
-# Create a folium map centered around the user's location
-m = folium.Map(
-    location=(user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x),
-    zoom_start=15,
-    control_scale=True,
-    tiles='Cartodb Positron',
-    max_bounds=True,
-    min_lat=min_lat,
-    max_lat=max_lat,
-    min_lon=min_lon,
-    max_lon=max_lon,
-    )
-
-# Add buffer to the map
-folium.GeoJson(search_buffer_gdf.geometry,
-               style_function=lambda x: {
-                   'fillOpacity': 0.1       # Set fill opacity to 10%
-                }
-                ).add_to(m)
-
-# Add locactions of stairs in red
-folium.GeoJson(
-    avoidance_buffer_gdf.geometry,
-    style_function=lambda x: {'color': 'magenta'},
-    tooltip='Stairs'
-    ).add_to(m)
-
-
-# Add user location to the map
-folium.Marker(
-    [user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x],
-    popup='User Location',
-    icon=folium.Icon(color='red')
-).add_to(m)
-
-# Add end location to the map
-folium.Marker(
-    [end_gdf.iloc[0].geometry.y, end_gdf.iloc[0].geometry.x],
-    popup='End Location',
-    icon=folium.Icon(color='red')
-).add_to(m)
-
-# Add POIs to the map
-add_markers(final_route_points_gdf)
-
-# Add routes to the map
-add_route_lines(final_route)
-
-# Display the map
-m
-
-print("Total Distance (metres):", final_distance)
-print("Total Time (minutes):", round(final_time/60, 2))
