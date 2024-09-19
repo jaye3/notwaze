@@ -26,14 +26,14 @@ def setOptions(type, options):
 # Setup Page and Session
 initSession()
 st.set_page_config(
-    page_title="WalkEase",
+    page_title="WalkEaze",
     layout="wide"
 )
 # with hc.HyLoader('Now Loading', hc.Loaders.standard_loaders,index=1):
 #     time.sleep(3)
 
 st.image("./frontend/logo.svg", width=150)
-st.title("Welcome to WalkEase - your urban walking guide on-the-go")
+st.title("Welcome to WalkEaze - your urban walking guide on-the-go")
 
 # Rendering in current location
 userLoc = getCurrentLoc() 
