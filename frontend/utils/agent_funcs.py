@@ -4,7 +4,7 @@ import requests
 def agentInit(startDetails, endDetails, distance):
     #start and end details are a tuple of (layman address, (lat, long))
     st.session_state.agent_active = True
-    url = "http://127.0.0.1:8000/collect-user-data" #currently localhost
+    url = "http://ec2-100-26-41-70.compute-1.amazonaws.com:80/collect-user-data" 
 
     radius = distance // 2
     data = {

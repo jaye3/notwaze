@@ -35,13 +35,14 @@ st.set_page_config(
 st.image("./frontend/logo.svg", width=150)
 st.title("Welcome to WalkEaze - your urban walking guide on-the-go")
 
+
 # Rendering in current location
 userLoc = getCurrentLoc() 
 userDetails = getLocDetails(userLoc)
 
 with st.container():
-    startLoc, endLoc = (userLoc), None
-    start, end = userDetails["BUILDINGNAME"], ""
+    startLoc, endLoc = userLoc, userLoc
+    start, end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
     startInput = st_keyup("Search for start point:", value=start, debounce=500, key="init")
     if startInput != userDetails["BUILDINGNAME"] and startInput:
@@ -58,7 +59,7 @@ with st.container():
             startLoc = startPoint[1]
 
     endInput = st_keyup("Search for end point:", value=end, debounce=500)
-    if endInput:
+    if endInput != userDetails["BUILDINGNAME"] and endInput:
         endPoint = st.selectbox(
             label="End at:", 
             options=setSearchOptions(endInput),
