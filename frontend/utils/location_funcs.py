@@ -7,7 +7,7 @@ def getCurrentLoc():
     currentLoc = get_geolocation()
     time.sleep(1)
     streamlit.write(currentLoc)
-    if "coords" not in currentLoc:
+    if currentLoc == None:
         return None
 
     details = currentLoc["coords"] 
