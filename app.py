@@ -32,10 +32,10 @@ st.set_page_config(
 
 # Rendering in current location
 userLoc = getCurrentLoc() 
+if userLoc != None:
+    userDetails = getLocDetails(userLoc)
 
-userDetails = getLocDetails(userLoc)
-
-if st.session_state.start == None:
+if st.session_state.start == None and userLoc != None:
     # st.write(st.session_state.start)
     st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]

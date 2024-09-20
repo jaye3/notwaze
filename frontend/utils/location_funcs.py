@@ -6,6 +6,9 @@ from frontend.services.onemap_auth import getResponse
 def getCurrentLoc():
     currentLoc = get_geolocation()
     time.sleep(1.5)
+    if "coords" not in currentLoc:
+        return None
+        
     details = currentLoc["coords"] 
     coords = [details["latitude"], details["longitude"]]
         
