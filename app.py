@@ -109,7 +109,7 @@ with st.container():
     }
     st.write(userData)
 
-    st.button(label="Let's Go!", on_click=lambda: agentInit(userData), key="activate")
+    st.button(label="Let's Go!", key="activate")
 
 
 ################################
@@ -117,7 +117,7 @@ with st.container():
 
 with st.container():
     if st.session_state.agent_active:
-        routeObj = agentInit()
+        routeObj = agentInit(userData)
         st.session_state.activateMap = True
         st.write(routeObj)
 
