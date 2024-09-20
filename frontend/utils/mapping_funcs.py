@@ -1,6 +1,5 @@
 from streamlit_folium import st_folium as folium
 from folium.plugins import PolyLineTextPath
-import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
 import json
