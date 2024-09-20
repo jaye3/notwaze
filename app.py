@@ -33,9 +33,6 @@ st.set_page_config(
 # Rendering in current location
 userLoc = getCurrentLoc() 
 
-#For testing - preset location
-userLoc = [1.296370, 103.849884]
-
 userDetails = getLocDetails(userLoc)
 
 if st.session_state.start == None:
