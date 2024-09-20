@@ -4,7 +4,6 @@ import requests, json, time
 # Third-party libraries
 import streamlit as st
 from st_keyup import st_keyup
-# from streamlit_extras.switch_page_button import switch_page 
 import folium
 
 # Helper functions (local imports)
