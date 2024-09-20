@@ -117,7 +117,7 @@ with st.container():
 
 with st.container():
     if st.session_state.agent_active:
-        routeObj = agentRouting()
+        routeObj = agentInit()
         st.session_state.activateMap = True
         st.write(routeObj)
 
