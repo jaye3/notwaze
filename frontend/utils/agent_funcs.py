@@ -4,7 +4,7 @@ import requests, json, os
 def agentInit(userData):
     st.session_state.agent_active = True
 
-    url = "http://3.210.254.22:80/generate_route" 
+    url = "http://3.210.254.22/generate_route" 
     jsonData = json.dumps(userData, indent=4)
     # os.write(1, f"{jsonData}\n".encode())
     st.write(jsonData)
