@@ -115,10 +115,10 @@ with st.container():
 ################################
 
 
-with st.container():
-    if st.session_state.agent_active:
-        st.header("Personalise your route with Waz, our chatbot!")
-        activateAgent()
+# with st.container():
+#     if st.session_state.agent_active:
+#         st.header("Personalise your route with Waz, our chatbot!")
+#         activateAgent()
     
 # Rendering map
 if st.session_state.activateMap:
