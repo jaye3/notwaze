@@ -4,14 +4,8 @@ import requests
 def agentInit(userData):
     #start and end details are a tuple of (layman address, (lat, long))
     st.session_state.agent_active = True
-    st.session_state.page = "chatbot"
 
     url = "http://3.89.63.81:80/collect-user-data" 
-
-    radius = userData["max_route_length"] // 2
-    userData["search_radius"] = radius
-    userData["num_POIs"] = 5
-    st.write(userData)
     
     try:
         # Send user details to backend API to store info
@@ -24,20 +18,23 @@ def agentInit(userData):
     except Exception as e:
         st.error(f"Request failed: {e}")
     
-    return
+    return 
 
-# def agentRouting():
-#     url = "http://ec2-100-26-41-70.compute-1.amazonaws.com:80/generate-route" 
-#     try:
-#         # Send user details to backend API to store info
-#         res = requests.post(url)
+def agentRouting():
+    url = "http://3.89.63.81:80/generate_route"
 
-#         if res.status_code == 200:
-#             st.success(f"Response from backend: {res.json()['message']}")
-#         else:
-#             st.error(f"Error: {res.status_code} - {res.text}")
-#     except Exception as e:
-#         st.error(f"Request failed: {e}")
-    
-#     return
+    # Define the headers
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json"
+    }
+    # Make the POST request
+    response = requests.post(url, headers=headers)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        st.success("Successfully generated route!")
+        return response.json()
+    else:
+        st.error(f"Failed with status code {response.status_code}")
     

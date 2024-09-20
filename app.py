@@ -12,6 +12,7 @@ from frontend.utils.agent_funcs import agentInit
 from frontend.utils.render_funcs import setSearchOptions, initSession
 from frontend.services.onemap_auth import initToken
 from frontend.utils.mapping_funcs import initGdf, add_markers, add_route_lines
+from frontend.services.agent import activateAgent
 
 def setOptions(type, options):
     if type == "start":
@@ -29,22 +30,12 @@ st.set_page_config(
     layout="wide"
 )
 
-# home = st.Page(
-#     "./app.py",
-#     title="Home", 
-#     default=(st.session_state.page == "app")
-# )
-# chatbot = st.Page(
-#     "pages/chatbot.py",
-#     title="Chatbot",
-#     default=(st.session_state.page == "chatbot")
-# )
-# page_dict = {}
-
-
-
 # Rendering in current location
 userLoc = getCurrentLoc() 
+
+#For testing - preset location
+userLoc = [1.296370, 103.849884]
+
 userDetails = getLocDetails(userLoc)
 
 if st.session_state.start == None:
@@ -85,6 +76,9 @@ with st.container():
             st.session_state.endLoc = endPoint[1]
     
     dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
+    radius = dist // 2
+
+    num_pois = st.slider("How many places would you like to visit on your walk?", 1, 10, 5, key="pois")
 
     poi_types = st.multiselect(
         label="What would you like to see? (choose one or more options)",
@@ -104,23 +98,25 @@ with st.container():
     isBarrierFree = st.checkbox(
         label="Prefer to avoid barriers (e.g. stairs) along the route"
     )
+    
 
     userData = {
         "user_location": st.session_state.startLoc,
         "end_location": st.session_state.endLoc,
         "max_route_length": dist, 
+        "search_radius": radius,
+        "num_POIs": num_pois,
         "poi_types": poi_types,
         "amenity": includeAmenity,
         "barrier_free": isBarrierFree
     }
+    st.write(userData)
 
     st.button(label="Let's Go!", on_click=lambda: agentInit(userData), key="activate")
-    # if st.session_state.page == "chatbot":
-    #     switch_page("chatbot")
+
 
 ################################
 
-from frontend.services.agent import activateAgent
 
 with st.container():
     if st.session_state.agent_active:

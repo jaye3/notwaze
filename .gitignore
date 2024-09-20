@@ -8,3 +8,7 @@
 # Ignore pychache files and folders
 __pycache__
 *.pyc
+
+#Ignore other files
+.empty
+.ipynb_checkpoints
