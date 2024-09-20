@@ -11,7 +11,7 @@ def activateAgent():
     if "messages" not in st.session_state:
         st.session_state.messages = [{
             "role": "Waz",
-            "content": "Hello! I got all the info you just entered! How do you want to personalize your route?"
+            "content": "Hello! I got all the info you just entered! Here's what I got for you:"
         }]
 
     # Initialize session id
@@ -24,11 +24,13 @@ def activateAgent():
             st.markdown(message["content"])
 
     # Generate route when chatbot initializes
-    url = "http://ec2-100-26-41-70.compute-1.amazonaws.com:80/generate_route"  
+    url = "https://ec2-100-26-41-70.compute-1.amazonaws.com:80/generate_route"  
 
     try:
-        response = requests.post(url)  # Call the endpoint without parameters
+        response = requests.post(url)  
+        st.write(response)
         route_response = response.json()  # Parse the JSON response
+        st.session_state.route = response.json()
 
         # Check if a valid route is returned
         if 'route_points' in route_response:
@@ -46,15 +48,9 @@ def activateAgent():
         st.chat_message("assistant").markdown(f"Error connecting to the route generation service: {str(e)}")
 
     # React to user input
-    if prompt := st.chat_input("What is up?"):
+    if prompt := st.chat_input("Choose the path you'd like!"):
         question = prompt
         st.chat_message("user").markdown(question)
-
-        # Here you can implement additional logic for other user interactions if needed
-        # For example, you can call another endpoint or process the user's question
-
-        # Example placeholder response
-        st.chat_message("assistant").markdown("I'm here to assist you with your questions!")
 
         # Add user input to chat history
         st.session_state.messages.append({"role": "user", "content": question})

@@ -6,6 +6,8 @@ import os
 def initSession():
     if 'agent_active' not in st.session_state:
         st.session_state.agent_active = False
+    if 'page' not in st.session_state:
+        st.session_state.page = "app"
     if "ONEMAP_API_KEY" not in os.environ:
         initToken()
     if "start" not in st.session_state:
@@ -16,6 +18,10 @@ def initSession():
         st.session_state.startLoc = None  
     if "endLoc" not in st.session_state:
         st.session_state.endLoc = None  
+    if "route" not in st.session_state:
+        st.session_state.route = None  
+    if "activateMap" not in st.session_state:
+        st.session_state.activateMap = None  
 
 
 def setSearchOptions(loc):

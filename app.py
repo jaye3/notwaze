@@ -3,17 +3,16 @@ import requests, json, time
 
 # Third-party libraries
 import streamlit as st
-import folium
-from streamlit_folium import st_folium
 from st_keyup import st_keyup
-# import hydralit_components as hc
+from streamlit_extras.switch_page_button import switch_page 
+import folium
 
 # Helper functions (local imports)
 from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
 from frontend.utils.agent_funcs import agentInit
 from frontend.utils.render_funcs import setSearchOptions, initSession
 from frontend.services.onemap_auth import initToken
-from frontend.services.agent import activateAgent
+from frontend.utils.mapping_funcs import initGdf, add_markers, add_route_lines
 
 def setOptions(type, options):
     if type == "start":
@@ -25,21 +24,37 @@ def setOptions(type, options):
 
 # Setup Page and Session
 initSession()
+
 st.set_page_config(
     page_title="WalkEaze",
     layout="wide"
 )
+
+# home = st.Page(
+#     "./app.py",
+#     title="Home", 
+#     default=(st.session_state.page == "app")
+# )
+# chatbot = st.Page(
+#     "pages/chatbot.py",
+#     title="Chatbot",
+#     default=(st.session_state.page == "chatbot")
+# )
+# page_dict = {}
+
+
 
 # Rendering in current location
 userLoc = getCurrentLoc() 
 userDetails = getLocDetails(userLoc)
 
 if st.session_state.start == None:
+    # st.write(st.session_state.start)
     st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
 st.image("./frontend/logo.svg", width=150)
-st.title("Welcome to WalkEaze - your urban walking guide on-the-go")
+st.header("Welcome to WalkEaze - your urban walking guide on-the-go")
 
 with st.container():
     startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="init")
@@ -101,77 +116,77 @@ with st.container():
     }
 
     st.button(label="Let's Go!", on_click=lambda: agentInit(userData), key="activate")
-
-
-
+    # if st.session_state.page == "chatbot":
+    #     switch_page("chatbot")
 
 ################################
+
+from frontend.services.agent import activateAgent
 
 with st.container():
     if st.session_state.agent_active:
         st.header("Personalise your route with Waz, our chatbot!")
         activateAgent()
-        
+    
+# Rendering map
+if st.session_state.activateMap:
 
-# # Rendering map
-# if st.session_state.activateMap:
-#     # The line below is to import the CSS from font-awesome -- to use their icons (refer to icon_dict in function add_poi_markers)
-#     html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">'
+    # The line below is to import the CSS from font-awesome -- to use their icons (refer to icon_dict in function add_poi_markers)
+    html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">'
 
-#     # Define a map boundary so user cannot drag map out too far (Hard-coded)
-#     min_lon, max_lon = 102.6920, 105.0920
-#     min_lat, max_lat = 1.0305, 1.5505
+    # Define a map boundary so user cannot drag map out too far (Hard-coded)
+    min_lon, max_lon = 102.6920, 105.0920
+    min_lat, max_lat = 1.0305, 1.5505
 
-#     # Create a folium map centered around the user's location
-#     m = folium.Map(
-#         location=(user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x),
-#         zoom_start=15,
-#         control_scale=True,
-#         tiles='Cartodb Positron',
-#         max_bounds=True,
-#         min_lat=min_lat,
-#         max_lat=max_lat,
-#         min_lon=min_lon,
-#         max_lon=max_lon,
-#         )
+    route_gdf = initGdf(st.session_state.route)
 
-#     # Add buffer to the map
-#     folium.GeoJson(search_buffer_gdf.geometry,
-#                 style_function=lambda x: {
-#                     'fillOpacity': 0.1       # Set fill opacity to 10%
-#                     }
-#                     ).add_to(m)
+    # Create a folium map centered around the user's location
+    m = folium.Map(
+        location=(user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x),
+        zoom_start=15,
+        control_scale=True,
+        tiles='Cartodb Positron',
+        max_bounds=True,
+        min_lat=min_lat,
+        max_lat=max_lat,
+        min_lon=min_lon,
+        max_lon=max_lon,
+        )
 
-#     # Add locactions of stairs in red
-#     folium.GeoJson(
-#         avoidance_buffer_gdf.geometry,
-#         style_function=lambda x: {'color': 'magenta'},
-#         tooltip='Stairs'
-#         ).add_to(m)
+    # # Add buffer to the map
+    # folium.GeoJson(search_buffer_gdf.geometry,
+    #             style_function=lambda x: {
+    #                 'fillOpacity': 0.1       # Set fill opacity to 10%
+    #                 }
+    #                 ).add_to(m)
+
+    # # Add locactions of stairs in red
+    # folium.GeoJson(
+    #     avoidance_buffer_gdf.geometry,
+    #     style_function=lambda x: {'color': 'magenta'},
+    #     tooltip='Stairs'
+    #     ).add_to(m)
 
 
-#     # Add user location to the map
-#     folium.Marker(
-#         [user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x],
-#         popup='User Location',
-#         icon=folium.Icon(color='red')
-#     ).add_to(m)
+    # Add user location to the map
+    folium.Marker(
+        [user_gdf.iloc[0].geometry.y, user_gdf.iloc[0].geometry.x],
+        popup='User Location',
+        icon=folium.Icon(color='red')
+    ).add_to(m)
 
-#     # Add end location to the map
-#     folium.Marker(
-#         [end_gdf.iloc[0].geometry.y, end_gdf.iloc[0].geometry.x],
-#         popup='End Location',
-#         icon=folium.Icon(color='red')
-#     ).add_to(m)
+    # Add end location to the map
+    folium.Marker(
+        [end_gdf.iloc[0].geometry.y, end_gdf.iloc[0].geometry.x],
+        popup='End Location',
+        icon=folium.Icon(color='red')
+    ).add_to(m)
 
-#     # Add POIs to the map
-#     add_markers(final_route_points_gdf)
+    # Add POIs to the map
+    add_markers(route_gdf)
 
-#     # Add routes to the map
-#     add_route_lines(final_route)
+    # Add routes to the map
+    add_route_lines(route_gdf)
 
-#     # Display the map
-#     m
-
-#     print("Total Distance (metres):", final_distance)
-#     print("Total Time (minutes):", round(final_time/60, 2))
+    # Display the map
+    m

@@ -1,5 +1,27 @@
 from streamlit_folium import st_folium as folium
 from folium.plugins import PolyLineTextPath
+import geopandas as gpd
+import pandas as pd
+from shapely.geometry import Point
+import json
+
+def initGdf(json_data):
+    # Load the JSON data
+    data = json.loads(json_data)
+
+    # Create a DataFrame from the route_points
+    df = pd.DataFrame(data['route_points'])
+
+    # Create a GeoDataFrame
+    gdf = gpd.GeoDataFrame(
+        df,
+        geometry=gpd.points_from_xy(df.longitude, df.latitude)
+    )
+
+    # Set the coordinate reference system (CRS) if needed
+    gdf.set_crs(epsg=4326, inplace=True)  # WGS84
+    return gdf
+
 
 def add_markers(gdf):
   # Add POIs to the map
