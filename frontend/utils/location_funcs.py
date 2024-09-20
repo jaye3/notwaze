@@ -6,7 +6,6 @@ from frontend.services.onemap_auth import getResponse
 def getCurrentLoc():
     currentLoc = get_geolocation()
     time.sleep(1)
-    streamlit.write(currentLoc)
     if currentLoc == None:
         return None
 

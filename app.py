@@ -72,7 +72,7 @@ with st.container():
             st.session_state.end = endPoint[0]
             st.session_state.endLoc = endPoint[1]
     
-    dist = st.slider("Distance of your walk", 100, 7000, 1000, 100, key="distance")
+    dist = st.slider("Distance of your walk", 100, 7000, 2000, 100, key="distance")
     radius = dist // 2
 
     num_pois = st.slider("How many places would you like to visit on your walk?", 1, 10, 5, key="pois")
