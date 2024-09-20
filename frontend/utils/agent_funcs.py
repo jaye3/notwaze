@@ -5,7 +5,7 @@ def agentInit(userData):
     #start and end details are a tuple of (layman address, (lat, long))
     st.session_state.agent_active = True
 
-    url = "http://3.89.63.81:80/generate_route" 
+    url = "http://3.210.254.22/generate_route" 
     
     try:
         # Send user details to backend API to store info
@@ -23,7 +23,7 @@ def agentInit(userData):
     return 
 
 def generateSummary():
-    url = "http://3.89.63.81:80/generate-summary" 
+    url = "http://3.210.254.22/generate-summary" 
     
     try:
         # Send user details to backend API to store info
