@@ -30,11 +30,11 @@ st.set_page_config(
     layout="wide"
 )
 
-if st.session_state.start == None:
-    # Rendering in current location
-    userLoc = getCurrentLoc() 
-    userDetails = getLocDetails(userLoc)
+# Rendering in current location
+userLoc = getCurrentLoc() 
+userDetails = getLocDetails(userLoc)
 
+if st.session_state.start == None:
     st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
@@ -56,7 +56,7 @@ with st.container():
             st.session_state.start = startPoint[0]
             st.session_state.startLoc = startPoint[1]
 
-    endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=500)
+    endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=500, key="endInit")
     if endInput != st.session_state.end and endInput:
         endPoint = st.selectbox(
             label="End at:", 
@@ -96,7 +96,7 @@ with st.container():
         "end_location": st.session_state.endLoc,
         "max_route_length": dist, 
         "poi_types": poi_types,
-        "amenity_types": includeAmenity,
+        "amenity": includeAmenity,
         "barrier_free": isBarrierFree
     }
 
