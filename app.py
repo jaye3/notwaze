@@ -8,11 +8,9 @@ import folium
 
 # Helper functions (local imports)
 from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
-from frontend.utils.agent_funcs import agentInit
+from frontend.utils.agent_funcs import agentInit, agentRouting
 from frontend.utils.render_funcs import setSearchOptions, initSession
-from frontend.services.onemap_auth import initToken
 from frontend.utils.mapping_funcs import initGdf, add_markers, add_route_lines
-from frontend.services.agent import activateAgent
 
 def setOptions(type, options):
     if type == "start":
@@ -115,10 +113,11 @@ with st.container():
 ################################
 
 
-# with st.container():
-#     if st.session_state.agent_active:
-#         st.header("Personalise your route with Waz, our chatbot!")
-#         activateAgent()
+with st.container():
+    if st.session_state.agent_active:
+        routeObj = agentRouting()
+        st.write(routeObj)
+
     
 # Rendering map
 if st.session_state.activateMap:
