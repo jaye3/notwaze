@@ -33,7 +33,7 @@ def agentInit(userData):
     # Check if the request was successful
     if response.status_code == 200:
         print("Success!")
-        print("Response:", response.json())  # Assuming the response is in JSON format
+        st.write("Response:", response.json())  # Assuming the response is in JSON format
     else:
         print(f"Failed with status code {response.status_code}")
         print("Response:", response.text)
