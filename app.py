@@ -133,8 +133,6 @@ if st.session_state.activateMap:
     min_lon, max_lon = 102.6920, 105.0920
     min_lat, max_lat = 1.0305, 1.5505
 
-    route_gdf = initGdf(st.session_state.route)
-
     # Create a folium map centered around the user's location
     m = folium.Map(
         location=(routePoints[0]["latitude"], routePoints[0]["longitude"]),
