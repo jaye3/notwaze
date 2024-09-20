@@ -107,7 +107,7 @@ with st.container():
         "amenity": includeAmenity,
         "barrier_free": isBarrierFree
     }
-    st.write(st.session_state.userData)
+    # st.write(st.session_state.userData)
 
     st.button(label="Let's Go!", on_click=agentInit(st.session_state.userData), key="activate")
 
