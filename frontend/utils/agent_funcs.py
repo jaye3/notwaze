@@ -23,18 +23,29 @@ def agentInit(userData):
 def agentRouting():
     url = "http://3.89.63.81:80/generate_route"
 
-    # Define the headers
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json"
     }
-    # Make the POST request
-    response = requests.post(url, headers=headers)
 
-    # Check if the request was successful
-    if response.status_code == 200:
-        st.success("Successfully generated route!")
-        return response.json()
-    else:
-        st.error(f"Failed with status code {response.status_code}")
+    try:
+        # Make the POST request
+        response = requests.post(url, headers=headers)
+        
+        # Check if the request was successful
+        if response.status_code == 200:
+            st.success("Successfully generated route!")
+            return response.json()
+        else:
+            st.error(f"Failed with status code {response.status_code}: {response.text}")
+            return None
     
+    except requests.exceptions.ConnectionError as conn_err:
+        st.error(f"Connection error: {conn_err}")
+        return None
+    except requests.exceptions.Timeout as timeout_err:
+        st.error(f"Request timed out: {timeout_err}")
+        return None
+    except requests.exceptions.RequestException as req_err:
+        st.error(f"An error occurred: {req_err}")
+        return None
