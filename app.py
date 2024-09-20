@@ -10,7 +10,7 @@ from streamlit_folium import st_folium
 
 # Helper functions (local imports)
 from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
-from frontend.utils.agent_funcs import agentInit, agentRouting, generateSummary
+from frontend.utils.agent_funcs import agentInit, generateSummary
 from frontend.utils.render_funcs import setSearchOptions, initSession
 from frontend.utils.mapping_funcs import initGdf, add_markers, add_route_lines
 
