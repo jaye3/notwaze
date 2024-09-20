@@ -6,7 +6,8 @@ def agentInit(userData):
 
     url = "http://3.210.254.22:80/generate_route" 
     jsonData = json.dumps(userData, indent=4)
-    os.write(1, f"{jsonData}\n".encode())
+    # os.write(1, f"{jsonData}\n".encode())
+    st.write(jsonData)
     
     try:
         # Send user details to backend API to store info
