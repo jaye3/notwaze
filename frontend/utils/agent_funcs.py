@@ -13,6 +13,7 @@ def agentInit(userData):
 
         if res.status_code == 200:
             st.success(f"Response from backend: {res.json()['message']}")
+            st.session_state.route = res.json()
             return res.json()
         else:
             st.error(f"Error: {res.status_code} - {res.text}")
