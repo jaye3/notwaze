@@ -1,8 +1,10 @@
 boto3==1.24.28
 folium==0.17.0
+geopandas==1.0.1
+pandas==2.2.2
 python-dotenv==1.0.1
 Requests==2.32.3
-streamlit==1.35.0
+Shapely==2.0.6
+streamlit==1.38.0
 streamlit_folium==0.22.0
 streamlit_js_eval==0.1.7
-streamlit_keyup==0.2.4
