@@ -24,7 +24,7 @@ def activateAgent():
             st.markdown(message["content"])
 
     # Generate route when chatbot initializes
-    url = "https://ec2-100-26-41-70.compute-1.amazonaws.com:80/generate_route"  
+    url = "http://3.89.63.81:80/generate-route"  
 
     try:
         response = requests.post(url)  

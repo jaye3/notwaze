@@ -6,7 +6,7 @@ def agentInit(userData):
     st.session_state.agent_active = True
     st.session_state.page = "chatbot"
 
-    url = "https://ec2-100-26-41-70.compute-1.amazonaws.com:80/collect-user-data" 
+    url = "http://3.89.63.81:80/collect-user-data" 
 
     radius = userData["max_route_length"] // 2
     userData["search_radius"] = radius
