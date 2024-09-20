@@ -9,8 +9,8 @@ def agentInit(userData):
     
     try:
         # Send user details to backend API to store info
-        res = requests.post(url, json=userData)
-
+        res = requests.post(url, data=userData)
+        
         if res.status_code == 200:
             st.success(f"Response from backend: {res.json()['message']}")
             st.session_state.route = res.json()
