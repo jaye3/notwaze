@@ -4,12 +4,10 @@ import streamlit as st
 import os
 
 def initSession():
+    if "ONEMAP_API_KEY" not in st.session_state:
+        initToken()
     if 'agent_active' not in st.session_state:
         st.session_state.agent_active = False
-    if 'page' not in st.session_state:
-        st.session_state.page = "app"
-    if "ONEMAP_API_KEY" not in os.environ:
-        initToken()
     if "start" not in st.session_state:
         st.session_state.start = None
     if "end" not in st.session_state:
@@ -21,8 +19,7 @@ def initSession():
     if "route" not in st.session_state:
         st.session_state.route = None  
     if "activateMap" not in st.session_state:
-        st.session_state.activateMap = None  
-
+        st.session_state.activateMap = None 
 
 def setSearchOptions(loc):
     res = searchAddress(loc)

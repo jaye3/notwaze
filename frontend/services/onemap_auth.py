@@ -1,4 +1,5 @@
 import requests, os, time
+import streamlit as st
 from dotenv import load_dotenv, set_key
       
 def initToken():
@@ -14,11 +15,11 @@ def initToken():
     response = response.json()
     token = response["access_token"]
 
-    # Setting new API key in .env session (HOTFIX)
-    os.environ["ONEMAP_API_KEY"] = token
+    # os.environ["ONEMAP_API_KEY"] = token
+    st.session_state.ONEMAP_API_KEY = token
     time.sleep(1)
 
-    if os.environ["ONEMAP_API_KEY"]:
+    if st.session_state.ONEMAP_API_KEY != None:
         return True
     
     return False
