@@ -26,7 +26,7 @@ def initToken():
 
 def getResponse(url):
     load_dotenv()
-    api_key = os.environ["ONEMAP_API_KEY"]
+    api_key = st.session_state.ONEMAP_API_KEY
     headers = {"Authorization": api_key}
     
     res = requests.request("GET", url, headers=headers).json()
