@@ -39,7 +39,6 @@ def agentInit(userData):
         return response.json()  # Assuming the response is in JSON format
     else:
         st.error(f"Failed with status code {response.status_code}")
-        st.error("Response:", response.text)
 
     
     return 
