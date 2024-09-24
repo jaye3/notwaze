@@ -2,6 +2,10 @@ import streamlit as st
 import requests, json, os
 
 def agentInit(userData):
+    st.session_state.submitted = True
+    if len(userData.keys()) != 8:
+        return None
+
     st.session_state.agent_active = True
 
     # Define the URL endpoint
@@ -51,8 +55,8 @@ def generateSummary():
         res = requests.get(url)
 
         if res.status_code == 200:
-            st.success(f"Response from backend: {res.json()['message']}")
-            return res.json()
+            st.success(f"Response from backend: {res.status_code}")
+            return res.json()["summary"]
         else:
             st.error(f"Error: {res.status_code} - {res.text}")
     except Exception as e:
