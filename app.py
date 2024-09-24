@@ -23,13 +23,15 @@ def setOptions(type, options):
 ##################################
 
 # Setup Page and Session
-initSession()
-
 st.set_page_config(
     page_title="WalkEaze",
     layout="wide"
 )
 
+if 'session_start' not in st.session_state:
+    st.session_state['session_start'] = True
+    initSession()
+    
 # Rendering in current location
 userLoc = getCurrentLoc() 
 if userLoc != None:
