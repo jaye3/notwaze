@@ -24,8 +24,10 @@ This will open up a new tab in your browser. To close the session, use <kbd>Ctrl
 ## About the project
 
 This web app is intended as a Proof-of-Concept in integrating OneMap APIs and Generative AI in the use case of walking goals. 
-As usage of the OneMap APIs and AWS provided were criteria for the product, we mainly used these resources to build our POC. For the purposes of the proof-of-concept and with this being our main foray into full-stack development, we chose to use Streamlit-FastAPI for our tech stack.
+As usage of the OneMap APIs and AWS provided were criteria for the product, we mainly used these resources to build our POC. 
 <br>
+For the purposes of the proof-of-concept and with this being our main foray into full-stack development, we chose to use Streamlit-FastAPI for our tech stack.
+<br><br>
 During development, we faced numerous challenges such as handling of geojson data, formulating an algorithm that worked around the pros and cons of the OneMap routing API, andthe compatibility in integration between the frontend and backend. 
 <br><br>
 Other future considerations include:
