@@ -23,20 +23,21 @@ This will open up a new tab in your browser. To close the session, use <kbd>Ctrl
 
 ## About the project
 
--   What your application does,
--   Why you used the technologies you used,
--   Some of the challenges you faced and features you hope to implement in the future.
---> native mobile development 
---> better conversion of parks as POIs
---> added integration of amenities to routes/routing considerations
+This web app is intended as a Proof-of-Concept in integrating OneMap APIs and Generative AI in the use case of walking goals. 
+As usage of the OneMap APIs and AWS provided were criteria for the product, we mainly used these resources to build our POC. For the purposes of the proof-of-concept and with this being our main foray into full-stack development, we chose to use Streamlit-FastAPI for our tech stack.
+<br>
+During development, we faced numerous challenges such as handling of geojson data, formulating an algorithm that worked around the pros and cons of the OneMap routing API, andthe compatibility in integration between the frontend and backend. 
+<br><br>
+Other future considerations include:
+<br>--> native mobile development 
+<br>--> better conversion of parks as POIs
+<br>--> adding more amenity types (e.g. water drinking points) to routes/routing considerations
+<br>--> Deploying onto a different tech stack for more reliability and scaleability (e.g. Next.js/Vercel)
 
 ## Technologies used
  - AWS Bedrock
- - OneMap APIs (...)
+ - OneMap APIs
  - Streamlit (for hosting the web app)
-
-
-
 
 # Credits
 Created by Heng Kuan Xin, Jay Choa, Nicolas Tang, and Zara Mufti
@@ -48,4 +49,3 @@ Sending appreciation to these fellas for the help and inspiration:
 - [Streamlit JS Eval for geolocation](https://github.com/aghasemi/streamlit_js_eval)
 - [Keyup for live searchbar](https://github.com/blackary/streamlit-keyup)
 - [ST Folium for integrating the map render](https://github.com/randyzwitch/streamlit-folium/tree/master)
-- [Repo for creating Docker Image with Streamlit](https://github.com/entbappy/Streamlit-app-Docker-Image)
