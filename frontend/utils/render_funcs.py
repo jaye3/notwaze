@@ -1,7 +1,6 @@
 from frontend.services.onemap_auth import initToken
 from frontend.utils.location_funcs import searchAddress
 import streamlit as st
-import os
 
 def initSession():
     if "ONEMAP_API_KEY" not in st.session_state:
@@ -28,9 +27,6 @@ def initSession():
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
-
-
-
 
 def setSearchOptions(loc):
     res = searchAddress(loc)

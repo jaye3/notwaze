@@ -2,7 +2,6 @@ from streamlit_folium import st_folium as folium
 from folium.plugins import PolyLineTextPath
 import pandas as pd
 from shapely.geometry import Point
-import json
 
 def add_markers(gdf):
   # Add POIs to the map

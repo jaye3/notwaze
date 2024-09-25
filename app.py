@@ -1,5 +1,5 @@
 # Standard library imports
-import requests, json, time
+import time
 
 # Third-party libraries
 import streamlit as st
