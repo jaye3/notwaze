@@ -30,6 +30,7 @@ def initSession():
         st.session_state.activate_summary = None
 
 
+
 def setSearchOptions(loc):
     res = searchAddress(loc)
     labels = [x["ADDRESS"] for x in res]
