@@ -54,6 +54,8 @@ if st.session_state.start == None and userLoc != None:
     st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
+time.sleep(1)
+
 st.image("./frontend/logo.svg", width=150)
 st.header("Welcome to Walk Eaze - your urban walking guide on-the-go")
 
