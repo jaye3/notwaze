@@ -12,7 +12,7 @@ from streamlit_folium import st_folium
 from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
 from frontend.utils.agent_funcs import agentInit, generateSummary
 from frontend.utils.render_funcs import setSearchOptions, initSession, checkData
-from frontend.utils.mapping_funcs import initGdf, add_markers, add_route_lines
+from frontend.utils.mapping_funcs import add_markers, add_route_lines
 
 def setOptions(type, options):
     if type == "start":
@@ -24,7 +24,7 @@ def setOptions(type, options):
 
 # Setup page configuration
 st.set_page_config(
-    page_title="WalkEaze",
+    page_title="Walk Eaze",
     layout="wide"
 )
 
@@ -43,52 +43,46 @@ if st.session_state.start == None and userLoc != None:
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
 st.image("./frontend/logo.svg", width=150)
-st.header("Welcome to WalkEaze - your urban walking guide on-the-go")
+st.header("Welcome to Walk Eaze - your urban walking guide on-the-go")
 
-with st.container():
+# Getting start location from user (pre-populated if Location is permitted)
+st.write("Let's get you started! Please enter your start point:")
+startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="startInit")
 
-    # Getting start location from user (pre-populated if Location is permitted)
-    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="init")
+    # Error message handling for empty field input
+if st.session_state.submitted and st.session_state.start == None:
+    st.error("Please enter a start point.", icon=":material/error:")
+
+    # Load in address options when user types in the input above
+if startInput != st.session_state.start:
+    startPoint = st.selectbox(
+        label="Start from:", 
+        options=setSearchOptions(startInput),
+        format_func=lambda x: x[0], 
+        index=None, 
+        key="startSelect", 
+        placeholder="Select address"
+        )
     
+    # Updating session variables with user's choice
+    if startPoint:
+        st.session_state.start = startPoint[0]
+        st.session_state.startLoc = startPoint[1]
+    else: 
+        st.caption("Please select a valid start address from the options given.")
+
+if st.session_state.startLoc != None:
+    st.divider() ########################################################
+    st.write("Great! Where would you like to walk to?")
+# Getting end location from user (pre-populated as Start location if none specified)
+    endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=1100, key="endInit")
+
         # Error message handling for empty field input
-    if st.session_state.session_start:
-        st.session_state['start_error'] = st.empty()
-    if st.session_state.get('submitted') and st.session_state.start is None:
-        st.session_state.start_error.error("Please enter a start point.", icon=":material/error:")
-    
-        # Load in address options when user types in the input above
-    if startInput != st.session_state.start and startInput:
-        st.session_state.start_error.empty()    # Clearing error message
-        startPoint = st.selectbox(
-            label="Start from:", 
-            options=setSearchOptions(startInput),
-            format_func=lambda x: x[0], 
-            index=None, 
-            key="startSelect", 
-            placeholder="Select address"
-            )
-        
-        # Updating session variables with user's choice
-        if startPoint:
-            st.session_state.start = startPoint[0]
-            st.session_state.startLoc = startPoint[1]
-        else: 
-            st.caption("Please select a valid start address from the options given.")
-    
-    st.divider() #########################################
+    if st.session_state.submitted and st.session_state.end is None:
+        st.error("Please enter an end point.", icon=":material/error:")
 
-    # Getting end location from user (pre-populated as Start location if none specified)
-    endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=500, key="endInit")
-    
-        # Error message handling for empty field input
-    if st.session_state.session_start:
-        st.session_state.end_error = st.empty()
-    if st.session_state.get('submitted') and st.session_state.end is None:
-        st.session_state.end_error.error("Please enter an end point.", icon=":material/error:")
-    
         # Load in address options when user types in the input above
     if endInput != st.session_state.end and endInput:
-        st.session_state.start_error.empty()    # Clearing error message
         endPoint = st.selectbox(
             label="End at:", 
             options=setSearchOptions(endInput),
@@ -104,13 +98,16 @@ with st.container():
             st.session_state.endLoc = endPoint[1]
         else:
             st.caption("Please select a valid end address from the options given.")
-        
+    
+
+if st.session_state.endLoc != None:
     st.divider() ########################################################
+    st.write("Feel free to customise your trail as you'd like!")
 
     dist = st.slider("Distance of your walk (km):", 100, 7000, 2000, 100, key="distance")
     radius = dist // 2
 
-    num_pois = st.slider("How many places would you like to visit on your walk?", 1, 10, 5, key="pois")
+    num_pois = st.slider("How many places would you like to visit on your walk?", 1, 8, 5, key="pois")
 
     poi_types = st.multiselect(
         label="What would you like to see? (choose one or more options)",
@@ -147,15 +144,24 @@ with st.container():
         "barrier_free": isBarrierFree
     }
 
-    st.button(label="Let's Go!", on_click=lambda: checkData(), key="activate")
+    st.button(label="Let's Go!", on_click=checkData, key="activate")
 
 ################################
 st.divider()
 
 # Only loads the agent functions & map if user inputs are all valid
 if st.session_state.valid_form:
-    agentInit(st.session_state.userData)
-    st.session_state.activateMap = True
+    st.header("Your route, at a glance:")
+    if st.session_state.route_success is None:
+        with st.spinner("Creating your route..."):
+            st.session_state.route_success = agentInit(st.session_state.userData)
+
+    if st.session_state.route_success:
+        st.session_state.activateMap = True
+        st.write(st.session_state.activateMap)
+    else:
+        st.error("We had some issues generating your route. \nMaybe try reducing the number of places to visit, or increase the distance of your walk?", 
+        icon=":material/fmd_bad:")
 
 # Rendering map
 if st.session_state.activateMap:
@@ -214,9 +220,13 @@ if st.session_state.activateMap:
 
     # Display the map
     st_data = st_folium(m, width=725)
-
-    with st.container():
-        with st.spinner("Generating summary..."):
-            st.header("What's waiting for you on this journey?")
-            summary = generateSummary()
+    st.session_state.activate_summary = True
+    
+if st.session_state.activate_summary:
+    st.header("What's waiting for you on this journey?")
+    with st.spinner("Generating summary..."):
+        summary = generateSummary()
+        if summary != None:
             st.write(summary)
+        else:
+            st.write("We had some trouble generating a summary for this route, but rest assured it'll be a fun one!")

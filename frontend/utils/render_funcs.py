@@ -24,6 +24,10 @@ def initSession():
         st.session_state.activateMap = None 
     if "valid_form" not in st.session_state:
         st.session_state.valid_form = None 
+    if "route_success" not in st.session_state:
+        st.session_state.route_success = None
+    if "activate_summary" not in st.session_state:
+        st.session_state.activate_summary = None
 
 
 def setSearchOptions(loc):
@@ -36,6 +40,7 @@ def setSearchOptions(loc):
 def checkData():
     st.session_state.submitted = True
     data = st.session_state.userData    
-    
+
     if None not in data.values():
         st.session_state.valid_form = True
+

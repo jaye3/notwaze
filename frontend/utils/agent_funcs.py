@@ -12,10 +12,7 @@ def agentInit(userData):
         "accept": "application/json",
         "Content-Type": "application/json"
     }
-    # st.write(userData['user_location'])
-    # data = json.dumps(userData)
-    st.json(userData)
-
+    
     #Define the JSON data to send in the POST request
     data = {
         "user_location": [userData['user_location'][1], userData['user_location'][0]],
@@ -29,18 +26,18 @@ def agentInit(userData):
     }
 
     # Make the POST request
-    with st.spinner("Generating route..."):
-        response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=data)
 
     # Check if the request was successful
     if response.status_code == 200:
-        st.success("Success!")
+        # st.success("Success!")
         st.session_state.route = response.json()
+        st.session_state.route_success = True
         # st.write(response.json())
         return response.json()  # Assuming the response is in JSON format
     else:
-        st.error(f"Failed with status code {response.status_code}")
-
+        # st.error(f"Failed with status code {response.status_code}")
+        st.session_state.route_success = False
     
     return 
 
@@ -52,11 +49,14 @@ def generateSummary():
         res = requests.get(url)
 
         if res.status_code == 200:
-            st.success(f"Response from backend: {res.status_code}")
-            return res.json()["summary"]
+            # st.success(f"Response from backend: {res.status_code}")
+            res = res.json()
+            summary = next(iter(res.values()))
+            return summary
         else:
-            st.error(f"Error: {res.status_code} - {res.text}")
+            return None
+            # st.error(f"Error: {res.status_code} - {res.text}")
     except Exception as e:
-        st.error(f"Request failed: {e}")
+        return None
+        # st.error(f"Request failed: {e}")
     
-    return 
