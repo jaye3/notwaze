@@ -158,7 +158,6 @@ if st.session_state.valid_form:
 
     if st.session_state.route_success:
         st.session_state.activateMap = True
-        st.write(st.session_state.activateMap)
     else:
         st.error("We had some issues generating your route. \nMaybe try reducing the number of places to visit, or increase the distance of your walk?", 
         icon=":material/fmd_bad:")
