@@ -11,7 +11,7 @@ from streamlit_folium import st_folium
 # Helper functions (local imports)
 from frontend.utils.location_funcs import getCurrentLoc, getLocDetails, searchAddress
 from frontend.utils.agent_funcs import agentInit, generateSummary
-from frontend.utils.render_funcs import setSearchOptions, initSession
+from frontend.utils.render_funcs import setSearchOptions, initSession, checkData
 from frontend.utils.mapping_funcs import initGdf, add_markers, add_route_lines
 
 def setOptions(type, options):
@@ -22,24 +22,23 @@ def setOptions(type, options):
 
 ##################################
 
-# Setup Page and Session
+# Setup page configuration
 st.set_page_config(
     page_title="WalkEaze",
     layout="wide"
 )
 
+# Initialising session (run only on-load)
 if 'session_start' not in st.session_state:
     st.session_state['session_start'] = True
     initSession()
 
-    
 # Rendering in current location
 userLoc = getCurrentLoc() 
 if userLoc != None:
     userDetails = getLocDetails(userLoc)
 
 if st.session_state.start == None and userLoc != None:
-    # st.write(st.session_state.start)
     st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
@@ -47,13 +46,19 @@ st.image("./frontend/logo.svg", width=150)
 st.header("Welcome to WalkEaze - your urban walking guide on-the-go")
 
 with st.container():
-    error_flag = False # Add a flag to track errors
 
-    st.write("DEBUG: submitted, start", st.session_state.start)
+    # Getting start location from user (pre-populated if Location is permitted)
     startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="init")
+    
+        # Error message handling for empty field input
+    if st.session_state.session_start:
+        st.session_state['start_error'] = st.empty()
     if st.session_state.get('submitted') and st.session_state.start is None:
-        st.error("Please enter a start point.")
+        st.session_state.start_error.error("Please enter a start point.", icon=":material/error:")
+    
+        # Load in address options when user types in the input above
     if startInput != st.session_state.start and startInput:
+        st.session_state.start_error.empty()    # Clearing error message
         startPoint = st.selectbox(
             label="Start from:", 
             options=setSearchOptions(startInput),
@@ -62,14 +67,28 @@ with st.container():
             key="startSelect", 
             placeholder="Select address"
             )
+        
+        # Updating session variables with user's choice
         if startPoint:
             st.session_state.start = startPoint[0]
             st.session_state.startLoc = startPoint[1]
+        else: 
+            st.caption("Please select a valid start address from the options given.")
     
-    
+    st.divider() #########################################
 
+    # Getting end location from user (pre-populated as Start location if none specified)
     endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=500, key="endInit")
+    
+        # Error message handling for empty field input
+    if st.session_state.session_start:
+        st.session_state.end_error = st.empty()
+    if st.session_state.get('submitted') and st.session_state.end is None:
+        st.session_state.end_error.error("Please enter an end point.", icon=":material/error:")
+    
+        # Load in address options when user types in the input above
     if endInput != st.session_state.end and endInput:
+        st.session_state.start_error.empty()    # Clearing error message
         endPoint = st.selectbox(
             label="End at:", 
             options=setSearchOptions(endInput),
@@ -78,16 +97,16 @@ with st.container():
             key="endSelect", 
             placeholder="Select address"
             )
+        
+        # Updating session variables with user's choice
         if endPoint:
             st.session_state.end = endPoint[0]
             st.session_state.endLoc = endPoint[1]
         else:
-            error_flag = True
-            st.error("Please select a valid end address.")
-    else:
-        error_flag = True
-        st.error("Please enter an end point.")
-    
+            st.caption("Please select a valid end address from the options given.")
+        
+    st.divider() ########################################################
+
     dist = st.slider("Distance of your walk (km):", 100, 7000, 2000, 100, key="distance")
     radius = dist // 2
 
@@ -115,6 +134,8 @@ with st.container():
     isBarrierFree = st.checkbox(
         label="Prefer to avoid barriers (e.g. stairs) along the route"
     )
+
+    # Load user input data into dictionary for function-passing
     st.session_state.userData = {
         "user_location": st.session_state.startLoc,
         "end_location": st.session_state.endLoc,
@@ -126,15 +147,15 @@ with st.container():
         "barrier_free": isBarrierFree
     }
 
-    st.button(label="Let's Go!", on_click=lambda: agentInit(st.session_state.userData), key="activate")
-    # st.write("routes:", st.session_state.route)
+    st.button(label="Let's Go!", on_click=lambda: checkData(), key="activate")
 
 ################################
+st.divider()
 
-
-with st.container():
-    if st.session_state.agent_active:
-        st.session_state.activateMap = True
+# Only loads the agent functions & map if user inputs are all valid
+if st.session_state.valid_form:
+    agentInit(st.session_state.userData)
+    st.session_state.activateMap = True
 
 # Rendering map
 if st.session_state.activateMap:
@@ -195,6 +216,7 @@ if st.session_state.activateMap:
     st_data = st_folium(m, width=725)
 
     with st.container():
-        st.header("What's waiting for you on this journey?")
-        summary = generateSummary()
-        st.write(summary)
+        with st.spinner("Generating summary..."):
+            st.header("What's waiting for you on this journey?")
+            summary = generateSummary()
+            st.write(summary)

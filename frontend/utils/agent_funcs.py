@@ -2,10 +2,6 @@ import streamlit as st
 import requests, json, os
 
 def agentInit(userData):
-    st.session_state.submitted = True
-    if len(userData.keys()) != 8:
-        return None
-
     st.session_state.agent_active = True
 
     # Define the URL endpoint
@@ -33,13 +29,14 @@ def agentInit(userData):
     }
 
     # Make the POST request
-    response = requests.post(url, headers=headers, json=data)
+    with st.spinner("Generating route..."):
+        response = requests.post(url, headers=headers, json=data)
 
     # Check if the request was successful
     if response.status_code == 200:
         st.success("Success!")
         st.session_state.route = response.json()
-        st.write(response.json())
+        # st.write(response.json())
         return response.json()  # Assuming the response is in JSON format
     else:
         st.error(f"Failed with status code {response.status_code}")
