@@ -20,6 +20,17 @@ def setOptions(type, options):
     if type == "end":
         st.session_state.endOptions = options
 
+# Function to scroll to the bottom
+def scrollToBottom():
+    st.components.v1.html(
+        """
+        <script>
+        window.scrollTo(0, document.body.scrollHeight);
+        </script>
+        """,
+        height=0,
+    )
+
 ##################################
 
 # Setup page configuration
@@ -229,3 +240,13 @@ if st.session_state.activate_summary:
             st.write(summary)
         else:
             st.write("We had some trouble generating a summary for this route, but rest assured it'll be a fun one!")
+
+st.write("Checking scroll conditions...")
+st.write("Start Location:", st.session_state.startLoc)
+st.write("End Location:", st.session_state.endLoc)
+st.write("Map Activated:", st.session_state.activateMap)
+st.write("Summary Activated:", st.session_state.activate_summary)
+
+if st.session_state.startLoc != None or st.session_state.endLoc is not None or st.session_state.activateMap or st.session_state.activate_summary:
+    st.write("Scrolling to bottom...")
+    scrollToBottom()
