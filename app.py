@@ -65,15 +65,8 @@ with st.container():
         # Error message handling for empty field input
     if st.session_state.submitted and st.session_state.start == None:
         st.error("Please enter a start point.", icon=":material/error:")
-    
-    if st.session_state.location_permit:
-        # Check if the button has been clicked
-        if st.button("Use my current location!", key="curr_start"):
-            st.session_state.use_curr_start = True
-            # Set start location using current location logic here
-            st.session_state.start = "Current Location"  # Example placeholder
 
-    elif startInput != st.session_state.start:
+    if startInput != st.session_state.start:
         # Load in address options when user types in the input above
         startPoint = st.selectbox(
             label="Start from:", 
@@ -90,8 +83,13 @@ with st.container():
             st.session_state.startLoc = startPoint[1]
         else: 
             st.caption("Please select a valid start address from the options given.")
+    
+    if st.session_state.location_permit:
+        # Check if the button has been clicked
+        if st.button("Use my current location!", key="curr_start"):
+            st.session_state.use_curr_start = True
 
-if (st.session_state.startLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_start):
+if (st.session_state.startLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_start or st.session_state.startLoc != userLoc):
     with st.container():
         st.divider() ########################################################
         scroll_to_container("end_location")
@@ -104,14 +102,8 @@ if (st.session_state.startLoc != None and not st.session_state.location_permit) 
             # Error message handling for empty field input
         if st.session_state.submitted and st.session_state.end is None:
             st.error("Please enter an end point.", icon=":material/error:")
-
-        if st.session_state.location_permit:
-            if st.button("Use my current location!", key="curr_end"):
-                st.session_state.use_curr_end = True
-                # Set end location using current location logic here
-                st.session_state.end = "Current Location"  # Example placeholder
         
-        elif endInput != st.session_state.end and endInput:
+        if endInput != st.session_state.end and endInput:
             # Load in address options when user types in the input above
             endPoint = st.selectbox(
                 label="End at:", 
@@ -129,15 +121,18 @@ if (st.session_state.startLoc != None and not st.session_state.location_permit) 
             else:
                 st.caption("Please select a valid end address from the options given.")
     
+        if st.session_state.location_permit:
+            if st.button("Use my current location!", key="curr_end"):
+                st.session_state.use_curr_end = True
 
-if (st.session_state.endLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_end):
+if (st.session_state.endLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_end or st.session_state.endLoc != userLoc):
     with st.container():
         st.divider() ########################################################
         scroll_to_container("customisation")
         
         st.write("Feel free to customise your trail as you'd like!")
 
-        dist = st.slider("Distance of your walk (km):", 100, 7000, 2000, 100, key="distance")
+        dist = st.slider("Distance of your walk (km):", 100, 7000, 1500, 100, key="distance")
         radius = dist // 2
 
         num_pois = st.slider("How many places would you like to visit on your walk?", 1, 8, 5, key="pois")
