@@ -6,28 +6,28 @@ import os
 def initSession():
     if "ONEMAP_API_KEY" not in st.session_state:
         initToken()
-    if "submitted" not in st.session_state:
-        st.session_state.submitted = False 
-    if 'agent_active' not in st.session_state:
-        st.session_state.agent_active = False
-    if "start" not in st.session_state:
-        st.session_state.start = None
-    if "end" not in st.session_state:
-        st.session_state.end = None   
-    if "startLoc" not in st.session_state:
-        st.session_state.startLoc = None  
-    if "endLoc" not in st.session_state:
-        st.session_state.endLoc = None  
-    if "route" not in st.session_state:
-        st.session_state.route = None  
-    if "activateMap" not in st.session_state:
-        st.session_state.activateMap = None 
-    if "valid_form" not in st.session_state:
-        st.session_state.valid_form = None 
-    if "route_success" not in st.session_state:
-        st.session_state.route_success = None
-    if "activate_summary" not in st.session_state:
-        st.session_state.activate_summary = None
+
+    defaults = {
+        "submitted": False,
+        "agent_active": False,
+        "start": None,
+        "end": None,
+        "startLoc": None,
+        "endLoc": None,
+        "route": None,
+        "activateMap": None,
+        "valid_form": None,
+        "route_success": None,
+        "activate_summary": None,
+        "location_permit": False,
+        "use_curr_start": False,
+        "use_curr_end": False
+    }
+    
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
 
 
 

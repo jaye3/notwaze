@@ -47,6 +47,7 @@ if 'session_start' not in st.session_state:
 # Rendering in current location
 userLoc = getCurrentLoc() 
 if userLoc != None:
+    st.session_state.location_permit = True
     userDetails = getLocDetails(userLoc)
 
 if st.session_state.start == None and userLoc != None:
@@ -59,11 +60,14 @@ st.header("Welcome to Walk Eaze - your urban walking guide on-the-go")
 with st.container():
     # Getting start location from user (pre-populated if Location is permitted)
     st.write("Let's get you started! Please enter your start point:")
-    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=600, key="startInit")
+    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=800, key="startInit")
 
         # Error message handling for empty field input
     if st.session_state.submitted and st.session_state.start == None:
         st.error("Please enter a start point.", icon=":material/error:")
+    
+    if st.session_state.location_permit:
+        st.session_state.use_curr_start = st.button("Use my current location!")
 
         # Load in address options when user types in the input above
     if startInput != st.session_state.start:
@@ -84,12 +88,12 @@ with st.container():
         else: 
             st.caption("Please select a valid start address from the options given.")
 
-if st.session_state.startLoc != None :
+if (st.session_state.startLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_start):
     with st.container():
         st.divider() ########################################################
         st.write("Great! Where would you like to walk to?")
     # Getting end location from user (pre-populated as Start location if none specified)
-        endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=1200, key="endInit")
+        endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=1600, key="endInit")
 
             # Error message handling for empty field input
         if st.session_state.submitted and st.session_state.end is None:
