@@ -21,7 +21,8 @@ def initSession():
         "activate_summary": None,
         "location_permit": False,
         "use_curr_start": False,
-        "use_curr_end": False
+        "use_curr_end": False,
+        "route_error_count": 0
     }
     
     for key, value in defaults.items():

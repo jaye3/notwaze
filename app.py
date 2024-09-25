@@ -60,17 +60,21 @@ st.header("Welcome to Walk Eaze - your urban walking guide on-the-go")
 with st.container():
     # Getting start location from user (pre-populated if Location is permitted)
     st.write("Let's get you started! Please enter your start point:")
-    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=800, key="startInit")
+    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="startInit")
 
         # Error message handling for empty field input
     if st.session_state.submitted and st.session_state.start == None:
         st.error("Please enter a start point.", icon=":material/error:")
     
     if st.session_state.location_permit:
-        st.session_state.use_curr_start = st.button("Use my current location!")
+        # Check if the button has been clicked
+        if st.button("Use my current location!", key="curr_start"):
+            st.session_state.use_curr_start = True
+            # Set start location using current location logic here
+            st.session_state.start = "Current Location"  # Example placeholder
 
+    elif startInput != st.session_state.start:
         # Load in address options when user types in the input above
-    if startInput != st.session_state.start:
         startPoint = st.selectbox(
             label="Start from:", 
             options=setSearchOptions(startInput),
@@ -84,23 +88,31 @@ with st.container():
         if startPoint:
             st.session_state.start = startPoint[0]
             st.session_state.startLoc = startPoint[1]
-            scroll_to_container("end_location")
         else: 
             st.caption("Please select a valid start address from the options given.")
 
 if (st.session_state.startLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_start):
     with st.container():
         st.divider() ########################################################
+        scroll_to_container("end_location")
+
         st.write("Great! Where would you like to walk to?")
+
     # Getting end location from user (pre-populated as Start location if none specified)
-        endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=1600, key="endInit")
+        endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=700, key="endInit")
 
             # Error message handling for empty field input
         if st.session_state.submitted and st.session_state.end is None:
             st.error("Please enter an end point.", icon=":material/error:")
 
+        if st.session_state.location_permit:
+            if st.button("Use my current location!", key="curr_end"):
+                st.session_state.use_curr_end = True
+                # Set end location using current location logic here
+                st.session_state.end = "Current Location"  # Example placeholder
+        
+        elif endInput != st.session_state.end and endInput:
             # Load in address options when user types in the input above
-        if endInput != st.session_state.end and endInput:
             endPoint = st.selectbox(
                 label="End at:", 
                 options=setSearchOptions(endInput),
@@ -114,14 +126,15 @@ if (st.session_state.startLoc != None and not st.session_state.location_permit) 
             if endPoint:
                 st.session_state.end = endPoint[0]
                 st.session_state.endLoc = endPoint[1]
-                scroll_to_container("customisation")
             else:
                 st.caption("Please select a valid end address from the options given.")
     
 
-if st.session_state.endLoc != None:
+if (st.session_state.endLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_end):
     with st.container():
         st.divider() ########################################################
+        scroll_to_container("customisation")
+        
         st.write("Feel free to customise your trail as you'd like!")
 
         dist = st.slider("Distance of your walk (km):", 100, 7000, 2000, 100, key="distance")
@@ -165,13 +178,13 @@ if st.session_state.endLoc != None:
         }
 
         st.button(label="Let's Go!", on_click=checkData, key="activate")
-        scroll_to_container("route_validation")
 
 ################################
 st.divider()
 
 # Only loads the agent functions & map if user inputs are all valid
 if st.session_state.valid_form:
+    scroll_to_container("glance")
     st.header("Your route, at a glance:")
 
     if st.session_state.route_success is None:
@@ -182,8 +195,13 @@ if st.session_state.valid_form:
         st.session_state.activateMap = True
         scroll_to_container("map")
     else:
-        st.error("We had some issues generating your route. \nMaybe try reducing the number of places to visit, or increase the distance of your walk?", 
-        icon=":material/fmd_bad:")
+        if st.session_state.route_error_count == 0:
+            st.error("We had some issues generating your route. \nMaybe try reducing the number of places to visit, or increase the distance of your walk?", 
+            icon=":material/fmd_bad:")
+            st.session_state.route_error_count += 2
+        else:
+            st.error("We had some issues generating your route. \nMaybe try changing your starting point or end destination?", 
+            icon=":material/fmd_bad:")
         
 # Rendering map
 if st.session_state.activateMap:
