@@ -38,6 +38,7 @@ Other future considerations include:
  - AWS Bedrock
  - OneMap APIs
  - Streamlit (for hosting the web app)
+ - [Link to the backend repo, hosted on EC2 with Docker](https://github.com/drgnfrts/notwaze-backend)
 
 # Credits
 Created by Heng Kuan Xin, Jay Choa, Nicolas Tang, and Zara Mufti
