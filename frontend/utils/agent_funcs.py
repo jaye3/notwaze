@@ -52,6 +52,7 @@ def generateSummary():
             # st.success(f"Response from backend: {res.status_code}")
             res = res.json()
             summary = next(iter(res.values()))
+            st.session_state.generate_summary = True
             return summary
         else:
             return None
