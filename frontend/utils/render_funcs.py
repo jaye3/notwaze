@@ -41,4 +41,7 @@ def checkData():
 
     if None not in data.values():
         st.session_state.valid_form = True
+        # resets the button every time it is pressed
+        st.session_state.route_success = None
+        st.session_state.generate_summary = None
 

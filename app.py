@@ -134,8 +134,8 @@ if (st.session_state.endLoc != None and not st.session_state.location_permit) or
         
         st.write("Feel free to customise your trail as you'd like!")
 
-        dist = st.slider("Distance of your walk (km):", 100, 7000, 1500, 100, key="distance")
-        radius = dist // 2
+        dist = st.slider("Distance of your walk (m):", 100, 7000, 1500, 100, key="distance")
+        radius = 1000
 
         num_pois = st.slider("How many places would you like to visit on your walk?", 1, 8, 5, key="pois")
 
@@ -183,6 +183,9 @@ st.divider()
 if st.session_state.valid_form:
     scroll_to_container("glance")
     st.header("Your route, at a glance:")
+
+    if 'route_success' not in st.session_state:
+        st.session_state.route_success = None
 
     if st.session_state.route_success is None:
         with st.spinner("Creating your route..."):
@@ -264,13 +267,19 @@ if st.session_state.activateMap:
         scroll_to_container("summary")
     
 if st.session_state.activate_summary:
+    if 'summary' not in st.session_state:
+        st.session_state.summary = ""
     with st.container():
         st.header("What's waiting for you on this journey?")
-
-        with st.spinner("Generating summary..."):
-            summary = generateSummary()
-            if summary != None:
-                st.write(summary)
-                scroll_to_container("see_summary")
-            else:
-                st.write("We had some trouble generating a summary for this route, but rest assured it'll be a fun one!")
+        summary = ""
+        if st.session_state.generate_summary == None:
+            with st.spinner("Generating summary..."):
+                summary = generateSummary()
+                st.session_state.summary = summary
+                if summary != None:
+                    st.write(summary)
+                    scroll_to_container("see_summary")
+                else:
+                    st.write("We had some trouble generating a summary for this route, but rest assured it'll be a fun one!")
+        elif st.session_state.generate_summary == True:
+            st.write(st.session_state.summary)
