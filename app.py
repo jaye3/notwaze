@@ -54,7 +54,7 @@ if st.session_state.start == None and userLoc != None:
     st.session_state.startLoc, st.session_state.endLoc = userLoc, userLoc
     st.session_state.start, st.session_state.end = userDetails["BUILDINGNAME"], userDetails["BUILDINGNAME"]
 
-time.sleep(1)
+time.sleep(2)
 
 st.image("./frontend/logo.svg", width=150)
 st.header("Welcome to Walk Eaze - your urban walking guide on-the-go")
@@ -62,7 +62,7 @@ st.header("Welcome to Walk Eaze - your urban walking guide on-the-go")
 with st.container():
     # Getting start location from user (pre-populated if Location is permitted)
     st.write("Let's get you started! Please enter your start point:")
-    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=500, key="startInit")
+    startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=300, key="startInit")
 
         # Error message handling for empty field input
     if st.session_state.submitted and st.session_state.start == None:
@@ -124,7 +124,7 @@ if (st.session_state.startLoc != None and not st.session_state.location_permit) 
                 st.caption("Please select a valid end address from the options given.")
     
         if st.session_state.location_permit:
-            if st.button("Use my current location!", key="curr_end"):
+            if st.button("End at my current location!", key="curr_end"):
                 st.session_state.use_curr_end = True
 
 if (st.session_state.endLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_end or st.session_state.endLoc != userLoc):
@@ -274,3 +274,4 @@ if st.session_state.activate_summary:
                 scroll_to_container("see_summary")
             else:
                 st.write("We had some trouble generating a summary for this route, but rest assured it'll be a fun one!")
+        scroll_to_container("see_summary")
