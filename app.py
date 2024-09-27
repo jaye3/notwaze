@@ -249,11 +249,24 @@ if st.session_state.activateMap:
         
 
         for i in range(len(routePoints)):
-            folium.Marker(
+            if i == 0:
+                folium.Marker(
                 [routePoints[i]["latitude"], routePoints[i]["longitude"]],
                 popup='User Location',
                 icon=folium.Icon(color='red')
             ).add_to(m)
+            elif i == len(routePoints) - 1:
+                folium.Marker(
+                [routePoints[i]["latitude"], routePoints[i]["longitude"]],
+                popup='End Location',
+                icon=folium.Icon(color='green')
+            ).add_to(m)
+            else:
+                folium.Marker(
+                    [routePoints[i]["latitude"], routePoints[i]["longitude"]],
+                    popup=routePoints[i]["name"],
+                    icon=folium.Icon(color='blue')
+                ).add_to(m)
 
         # Add POIs to the map
         # add_markers(routePoints)
