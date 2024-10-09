@@ -211,6 +211,7 @@ if st.session_state.activateMap:
         routeObj = st.session_state.route
         routePoints = routeObj["route_points"] # Array of dicts.
         routeSegments = routeObj['route_segments']
+
         # The line below is to import the CSS from font-awesome -- to use their icons (refer to icon_dict in function add_poi_markers)
         html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">'
 
@@ -223,20 +224,22 @@ if st.session_state.activateMap:
             location=(routePoints[0]["latitude"], routePoints[0]["longitude"]),
             zoom_start=15,
             control_scale=True,
-            tiles='Cartodb Positron',
+            tiles=None,  # Disable default tiles, as we'll add OneMap tiles
             max_bounds=True,
             min_lat=min_lat,
             max_lat=max_lat,
             min_lon=min_lon,
-            max_lon=max_lon,
-            )
+            max_lon=max_lon
+        )
 
-        # # Add locactions of stairs in red
-        # folium.GeoJson(
-        #     avoidance_buffer_gdf.geometry,
-        #     style_function=lambda x: {'color': 'magenta'},
-        #     tooltip='Stairs'
-        #     ).add_to(m)
+        # Add OneMap base map using the tile layer URL
+        folium.TileLayer(
+            tiles='https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png',
+            attr='<img src="https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png" style="height:20px;width:20px;"/>&nbsp;<a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener noreferrer">OneMap</a>&nbsp;&copy;&nbsp;contributors&nbsp;&#124;&nbsp;<a href="https://www.sla.gov.sg/" target="_blank" rel="noopener noreferrer">Singapore Land Authority</a>',
+            max_zoom=19,
+            min_zoom=11,
+            detect_retina=True
+        ).add_to(m)
         
         for i in range(len(routeSegments)):
             indiv_segment = routeSegments[i]
@@ -252,27 +255,22 @@ if st.session_state.activateMap:
             if i == 0:
                 folium.Marker(
                 [routePoints[i]["latitude"], routePoints[i]["longitude"]],
-                popup='User Location',
+                popup=f'START: {st.session_state.start}',
                 icon=folium.Icon(color='red')
             ).add_to(m)
             elif i == len(routePoints) - 1:
                 folium.Marker(
                 [routePoints[i]["latitude"], routePoints[i]["longitude"]],
-                popup='End Location',
+                popup=f'END: {st.session_state.end}',
                 icon=folium.Icon(color='green')
             ).add_to(m)
             else:
                 folium.Marker(
                     [routePoints[i]["latitude"], routePoints[i]["longitude"]],
-                    popup=routePoints[i]["name"],
+                    popup=f'Point #{i}: {routePoints[i]["name"]}',
                     icon=folium.Icon(color='blue')
                 ).add_to(m)
 
-        # Add POIs to the map
-        # add_markers(routePoints)
-
-        # # Add routes to the map
-        # add_route_lines(routePoints)
 
         # Display the map
         st_data = st_folium(m, width=725, height=400)
