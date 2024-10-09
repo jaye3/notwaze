@@ -63,6 +63,11 @@ with st.container():
     # Getting start location from user (pre-populated if Location is permitted)
     st.write("Let's get you started! Please enter your start point:")
     startInput = st_keyup("Search for start point:", value=st.session_state.start, debounce=300, key="startInit")
+    
+    if st.session_state.location_permit:
+        # Check if the button has been clicked
+        if st.button("Use my current location!", key="curr_start"):
+            st.session_state.use_curr_start = True
 
         # Error message handling for empty field input
     if st.session_state.submitted and st.session_state.start == None:
@@ -86,10 +91,7 @@ with st.container():
         else: 
             st.caption("Please select a valid start address from the options given.")
     
-    if st.session_state.location_permit:
-        # Check if the button has been clicked
-        if st.button("Use my current location!", key="curr_start"):
-            st.session_state.use_curr_start = True
+    
 
 if (st.session_state.startLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_start or st.session_state.startLoc != userLoc):
     with st.container():
@@ -100,7 +102,11 @@ if (st.session_state.startLoc != None and not st.session_state.location_permit) 
 
     # Getting end location from user (pre-populated as Start location if none specified)
         endInput = st_keyup("Search for end point:", value=st.session_state.end, debounce=700, key="endInit")
-
+        
+        if st.session_state.location_permit:
+            if st.button("End at my current location!", key="curr_end"):
+                st.session_state.use_curr_end = True
+                
             # Error message handling for empty field input
         if st.session_state.submitted and st.session_state.end is None:
             st.error("Please enter an end point.", icon=":material/error:")
@@ -122,10 +128,7 @@ if (st.session_state.startLoc != None and not st.session_state.location_permit) 
                 st.session_state.endLoc = endPoint[1]
             else:
                 st.caption("Please select a valid end address from the options given.")
-    
-        if st.session_state.location_permit:
-            if st.button("End at my current location!", key="curr_end"):
-                st.session_state.use_curr_end = True
+
 
 if (st.session_state.endLoc != None and not st.session_state.location_permit) or (st.session_state.use_curr_end or st.session_state.endLoc != userLoc):
     with st.container():
