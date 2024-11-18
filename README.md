@@ -3,8 +3,9 @@ Using Singapore's proprietary mapping service, WalkEaze aims to empower the publ
 
 This project was created for the Singapore Land Authority-Amazon Web Services Geospatial Innovation Challenge. Our team tackled the challenge statement, "Using OneMap to suggest a walking trail based on one’s health goals". 
 
-## Demo video
-TBC
+## Demos
+![Demo Result of Edith's Path](demo_edith.png)
+![Demo Result of Ethan's Path](demo_ethan.png)
 
 # Installation/Running the localhost
 
